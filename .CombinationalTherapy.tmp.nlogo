@@ -17,7 +17,7 @@ end
 
 to setup-disease
   ask n-of initial_disease patches [
-    infect
+    infect 2 2
   ]
 end
 
@@ -27,7 +27,6 @@ to go
   if(ticks mod antibiotic_interval = 0) [add-antibiotics]
   tick
 end
-
 
 ;;Antibiotics
 
@@ -50,18 +49,17 @@ to spread-disease
   ask patches with [infected?] [
     let d1 drug1_resistance
     let d2 drug2_resistance
-    ask patches in-radius 1 [
-
+    ask patches in-radius 1 with [infected? = false] [
       if(spread_chance > random 100)[infect d1 d2]
     ]
   ]
 end
 
-to infect (drug1_resistance drug2_resistance)
+to infect[d1_resistance d2_resistance]
   set pcolor red
   set infected? true
-  set drug1_resistance random ((2 - -2) + -2) + drug1_resistance
-  set drug2_resistance random ((2 - -2) + -2) + drug2_resistance
+  set drug1_resistance d1_resistance + (random ((2 - -2) + -2))
+  set drug2_resistance d2_resistance + (random ((2 - -2) + -2))
 end
 @#$#@#$#@
 GRAPHICS-WINDOW
@@ -179,17 +177,17 @@ antibiotic_interval
 antibiotic_interval
 100
 1000
-1000.0
+100.0
 10
 1
 ticks
 HORIZONTAL
 
 PLOT
-696
-345
-1064
-582
+703
+379
+1071
+616
 Disease Spread
 NIL
 NIL
@@ -202,6 +200,17 @@ false
 "" ""
 PENS
 "default" 1.0 0 -16777216 true "" "plot count patches with [infected?]"
+
+MONITOR
+828
+236
+975
+281
+Drug 1 Avg
+mean [drug1_resistance] of patches with [infected?]
+17
+1
+11
 
 @#$#@#$#@
 ## WHAT IS IT?
