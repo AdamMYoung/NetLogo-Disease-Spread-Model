@@ -23,10 +23,20 @@ end
 
 ;;Go
 to go
+  toggle-drugs
   if(ticks mod spread_rate = 0) [spread-disease]
   if(drug1_enabled and ticks mod drug1_interval = 0) [add-drug1]
   if(drug2_enabled and ticks mod drug2_interval = 0) [add-drug2]
   tick
+end
+
+;Drug toggle
+to toggle-drugs
+  let d1 drug1_tick_toggle
+  let d2 drug2_tick_toggle
+
+  if(d1 != 0 and d1 = ticks)[set drug1_enabled true]
+  if(d2 != 0 and d2 = ticks)[set drug2_enabled true]
 end
 
 ;;Antibiotics
@@ -171,9 +181,9 @@ HORIZONTAL
 
 SLIDER
 14
-348
+399
 186
-381
+432
 spread_rate
 spread_rate
 10
@@ -186,9 +196,9 @@ HORIZONTAL
 
 SLIDER
 14
-387
+438
 186
-420
+471
 spread_chance
 spread_chance
 1
@@ -200,10 +210,10 @@ spread_chance
 HORIZONTAL
 
 SLIDER
-11
-133
-184
-166
+10
+178
+183
+211
 drug1_interval
 drug1_interval
 100
@@ -234,10 +244,10 @@ PENS
 "D2" 1.0 0 -11085214 true "" "plot mean [drug2_resistance] of patches with [infected?]"
 
 SLIDER
-12
-180
-184
-213
+10
+216
+182
+249
 drug2_interval
 drug2_interval
 100
@@ -249,10 +259,10 @@ ticks
 HORIZONTAL
 
 SWITCH
-209
-133
-348
-166
+208
+178
+347
+211
 drug1_enabled
 drug1_enabled
 0
@@ -260,21 +270,21 @@ drug1_enabled
 -1000
 
 SWITCH
-210
-180
-349
-213
+208
+216
+347
+249
 drug2_enabled
 drug2_enabled
-1
+0
 1
 -1000
 
 PLOT
-689
-514
-1077
-737
+687
+509
+1098
+746
 Infected Patches
 Ticks
 Count
@@ -289,10 +299,10 @@ PENS
 "Infected" 1.0 0 -16777216 true "" "plot count patches with [infected?]"
 
 SLIDER
-14
-449
-186
-482
+15
+477
+187
+510
 mutation_chance
 mutation_chance
 1
@@ -302,6 +312,38 @@ mutation_chance
 1
 %
 HORIZONTAL
+
+INPUTBOX
+364
+151
+519
+211
+drug1_tick_toggle
+0.0
+1
+0
+Number
+
+INPUTBOX
+364
+217
+519
+277
+drug2_tick_toggle
+0.0
+1
+0
+Number
+
+TEXTBOX
+337
+129
+608
+163
+Defines which tick each drug should be enabled
+14
+0.0
+1
 
 @#$#@#$#@
 ## WHAT IS IT?

@@ -23,10 +23,20 @@ end
 
 ;;Go
 to go
+  toggle-drugs
   if(ticks mod spread_rate = 0) [spread-disease]
   if(drug1_enabled and ticks mod drug1_interval = 0) [add-drug1]
   if(drug2_enabled and ticks mod drug2_interval = 0) [add-drug2]
   tick
+end
+
+;Drug toggle
+to toggle-drugs
+  let d1 drug1_tick_toggle
+  let d2 drug2_tick_toggle
+
+  if(d1 != 0 and d1 = ticks)[set drug1_enabled true]
+  if(d2 != 0 and d2 = ticks)[set drug2_enabled true]
 end
 
 ;;Antibiotics
@@ -255,7 +265,7 @@ SWITCH
 211
 drug1_enabled
 drug1_enabled
-0
+1
 1
 -1000
 
@@ -266,15 +276,15 @@ SWITCH
 249
 drug2_enabled
 drug2_enabled
-0
+1
 1
 -1000
 
 PLOT
-689
-514
-1077
-737
+687
+509
+1098
+746
 Infected Patches
 Ticks
 Count
@@ -302,6 +312,38 @@ mutation_chance
 1
 %
 HORIZONTAL
+
+INPUTBOX
+364
+151
+519
+211
+drug1_tick_toggle
+0.0
+1
+0
+Number
+
+INPUTBOX
+364
+217
+519
+277
+drug2_tick_toggle
+0.0
+1
+0
+Number
+
+TEXTBOX
+369
+93
+526
+144
+Defines which tick each drug should be enabled (0 = disabled)
+14
+0.0
+1
 
 @#$#@#$#@
 ## WHAT IS IT?
