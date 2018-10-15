@@ -171,9 +171,9 @@ HORIZONTAL
 
 SLIDER
 14
-399
+348
 186
-432
+381
 spread_rate
 spread_rate
 10
@@ -186,9 +186,9 @@ HORIZONTAL
 
 SLIDER
 14
-438
+387
 186
-471
+420
 spread_chance
 spread_chance
 1
@@ -200,10 +200,10 @@ spread_chance
 HORIZONTAL
 
 SLIDER
-10
-178
-183
-211
+11
+133
+184
+166
 drug1_interval
 drug1_interval
 100
@@ -234,10 +234,10 @@ PENS
 "D2" 1.0 0 -11085214 true "" "plot mean [drug2_resistance] of patches with [infected?]"
 
 SLIDER
-10
-216
-182
-249
+12
+180
+184
+213
 drug2_interval
 drug2_interval
 100
@@ -249,10 +249,10 @@ ticks
 HORIZONTAL
 
 SWITCH
-208
-178
-347
-211
+209
+133
+348
+166
 drug1_enabled
 drug1_enabled
 0
@@ -260,13 +260,13 @@ drug1_enabled
 -1000
 
 SWITCH
-208
-216
-347
-249
+210
+180
+349
+213
 drug2_enabled
 drug2_enabled
-0
+1
 1
 -1000
 
@@ -289,10 +289,10 @@ PENS
 "Infected" 1.0 0 -16777216 true "" "plot count patches with [infected?]"
 
 SLIDER
-15
-477
-187
-510
+14
+449
+186
+482
 mutation_chance
 mutation_chance
 1
