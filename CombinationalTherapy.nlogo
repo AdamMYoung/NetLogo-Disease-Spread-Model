@@ -24,9 +24,8 @@ end
 ;;Go
 to go
   toggle-drugs
+  apply-drugs
   if(ticks mod spread_rate = 0) [spread-disease]
-  if(drug1_enabled and ticks mod drug1_interval = 0) [add-drug1]
-  if(drug2_enabled and ticks mod drug2_interval = 0) [add-drug2]
   tick
 end
 
@@ -37,6 +36,14 @@ to toggle-drugs
 
   if(d1 != 0 and d1 = ticks)[set drug1_enabled true]
   if(d2 != 0 and d2 = ticks)[set drug2_enabled true]
+end
+
+;;Applies the drugs at the specified rate.
+to apply-drugs
+  if(ticks != 0) [
+  if(drug1_enabled and ticks mod drug1_interval = 0) [add-drug1]
+  if(drug2_enabled and ticks mod drug2_interval = 0) [add-drug2]
+  ]
 end
 
 ;;Antibiotics
@@ -265,7 +272,7 @@ SWITCH
 211
 drug1_enabled
 drug1_enabled
-1
+0
 1
 -1000
 
@@ -319,7 +326,7 @@ INPUTBOX
 519
 211
 drug1_tick_toggle
-0.0
+2200.0
 1
 0
 Number
