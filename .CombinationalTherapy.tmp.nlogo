@@ -53,7 +53,7 @@ to add-drug1
   ask patches with [infected?] [
     ifelse(drug1_resistance < random 100)
     [cure]
-    [increase-resistance drug1_resistance]
+    [if(drug1_resistance != 100) [set drug1_resistance drug1_resistance + 1]]
   ]
 end
 
@@ -62,12 +62,8 @@ to add-drug2
   ask patches with [infected?] [
     ifelse(drug2_resistance < random 100)
     [cure]
-    []
+    [if(drug2_resistance != 100) [set drug2_resistance drug2_resistance + 1]]
   ]
-end
-
-to increase-resistance [resistance]
-  if(resistance != 100) [set resistance resistance + 1]
 end
 
 ;Sets the selected path to the cured status.
@@ -203,7 +199,7 @@ spread_rate
 spread_rate
 10
 1000
-100.0
+120.0
 10
 1
 ticks
@@ -233,7 +229,7 @@ drug1_interval
 drug1_interval
 100
 10000
-900.0
+400.0
 100
 1
 ticks
@@ -260,9 +256,9 @@ PENS
 
 SLIDER
 10
-216
+215
 182
-249
+248
 drug2_interval
 drug2_interval
 100
@@ -719,5 +715,5 @@ true
 Line -7500403 true 150 150 90 180
 Line -7500403 true 150 150 210 180
 @#$#@#$#@
-0
+1
 @#$#@#$#@

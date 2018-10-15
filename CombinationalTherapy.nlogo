@@ -191,25 +191,25 @@ NIL
 HORIZONTAL
 
 SLIDER
-14
-399
-186
-432
+10
+260
+182
+293
 spread_rate
 spread_rate
 10
 1000
-100.0
+120.0
 10
 1
 ticks
 HORIZONTAL
 
 SLIDER
-14
-438
-186
-471
+10
+299
+182
+332
 spread_chance
 spread_chance
 1
@@ -222,14 +222,14 @@ HORIZONTAL
 
 SLIDER
 10
-178
+175
 183
-211
+208
 drug1_interval
 drug1_interval
 100
 10000
-900.0
+400.0
 100
 1
 ticks
@@ -256,35 +256,35 @@ PENS
 
 SLIDER
 10
-216
+215
 182
-249
+248
 drug2_interval
 drug2_interval
 100
 10000
-500.0
+100.0
 100
 1
 ticks
 HORIZONTAL
 
 SWITCH
+205
+175
+344
 208
-178
-347
-211
 drug1_enabled
 drug1_enabled
-0
+1
 1
 -1000
 
 SWITCH
-208
-216
-347
-249
+205
+215
+344
+248
 drug2_enabled
 drug2_enabled
 1
@@ -310,10 +310,10 @@ PENS
 "Infected" 1.0 0 -16777216 true "" "plot count patches with [infected?]"
 
 SLIDER
-15
-477
-187
-510
+11
+338
+183
+371
 mutation_chance
 mutation_chance
 0
@@ -325,10 +325,10 @@ mutation_chance
 HORIZONTAL
 
 INPUTBOX
-364
-151
-519
-211
+365
+150
+520
+210
 drug1_tick_toggle
 3000.0
 1
@@ -336,10 +336,10 @@ drug1_tick_toggle
 Number
 
 INPUTBOX
-364
-217
-519
-277
+365
+215
+520
+275
 drug2_tick_toggle
 0.0
 1
@@ -715,5 +715,5 @@ true
 Line -7500403 true 150 150 90 180
 Line -7500403 true 150 150 210 180
 @#$#@#$#@
-0
+1
 @#$#@#$#@
