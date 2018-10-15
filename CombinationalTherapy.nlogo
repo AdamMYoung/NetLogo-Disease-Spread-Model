@@ -48,17 +48,21 @@ end
 
 ;;Antibiotics
 
-;Applies drug No.1 to the simulation.
+;Applies a drug effect to the simulation.
 to add-drug1
   ask patches with [infected?] [
-    if(drug1_resistance < random 100) [cure]
+    ifelse(drug1_resistance < random 100)
+    [cure]
+    [if(drug1_resistance != 100) [set drug1_resistance drug1_resistance + 1]]
   ]
 end
 
-;Applies drug No.2 to the simulation.
+;Applies a drug effect to the simulation.
 to add-drug2
   ask patches with [infected?] [
-    if(drug2_resistance < random 100) [cure]
+    ifelse(drug2_resistance < random 100)
+    [cure]
+    [if(drug2_resistance != 100) [set drug2_resistance drug2_resistance + 1]]
   ]
 end
 
@@ -113,11 +117,11 @@ end
 GRAPHICS-WINDOW
 1211
 35
-1664
-489
+1652
+477
 -1
 -1
-1.732
+2.3923
 1
 10
 1
@@ -127,10 +131,10 @@ GRAPHICS-WINDOW
 1
 1
 1
--128
-128
--128
-128
+-90
+90
+-90
+90
 0
 0
 1
@@ -225,7 +229,7 @@ drug1_interval
 drug1_interval
 100
 10000
-1000.0
+900.0
 100
 1
 ticks
@@ -259,7 +263,7 @@ drug2_interval
 drug2_interval
 100
 10000
-1000.0
+500.0
 100
 1
 ticks
@@ -312,9 +316,9 @@ SLIDER
 510
 mutation_chance
 mutation_chance
-1
+0
 100
-16.0
+0.0
 1
 1
 %
@@ -326,7 +330,7 @@ INPUTBOX
 519
 211
 drug1_tick_toggle
-2200.0
+3000.0
 1
 0
 Number
