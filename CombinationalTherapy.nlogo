@@ -17,23 +17,29 @@ end
 
 to setup-disease
   ask n-of initial_disease patches [
-    infect 2 2
+    infect 1 1
   ]
 end
 
 ;;Go
 to go
   if(ticks mod spread_rate = 0) [spread-disease]
-  if(ticks mod antibiotic_interval = 0) [add-antibiotics]
+  if(drug1_enabled and ticks mod drug1_interval = 0) [add-drug1]
+  if(drug2_enabled and ticks mod drug2_interval = 0) [add-drug2]
   tick
 end
 
-
 ;;Antibiotics
 
-to add-antibiotics
+to add-drug1
   ask patches with [infected?] [
-    if(drug1_resistance > random 100) [cure]
+    ifelse(drug1_resistance < random 100) [cure] [set drug1_resistance drug1_resistance + 5]
+  ]
+end
+
+to add-drug2
+  ask patches with [infected?] [
+    ifelse(drug2_resistance < random 100) [cure] [set drug2_resistance  drug2_resistance + 5]
   ]
 end
 
@@ -57,20 +63,38 @@ to spread-disease
 end
 
 to infect[d1_resistance d2_resistance]
+  let d1 d1_resistance
+  let d2 d2_resistance
+  let rand random 2
+
+  ifelse(rand = 0)
+  [set d1 d1 - 1]
+  [set d1 d1 + 1]
+
+  ifelse(rand = 0)
+  [set d2 d2 - 1]
+  [set d2 d2 + 1]
+
+  if(d1 < 0)[set d1 0]
+  if(d2 < 0)[set d2 0]
+
+  if(d1 > 100)[set d1 100]
+  if(d2 > 100)[set d2 100]
+
   set pcolor red
   set infected? true
-  set drug1_resistance random ((2 - -2) + -2) + d1_resistance
-  set drug2_resistance random ((2 - -2) + -2) + drug2_resistance
+  set drug1_resistance d1
+  set drug2_resistance d2
 end
 @#$#@#$#@
 GRAPHICS-WINDOW
-1092
-10
-1698
-617
+1211
+35
+1664
+489
 -1
 -1
-9.2
+1.732
 1
 10
 1
@@ -80,10 +104,10 @@ GRAPHICS-WINDOW
 1
 1
 1
--32
-32
--32
-32
+-128
+128
+-128
+128
 0
 0
 1
@@ -141,14 +165,14 @@ HORIZONTAL
 
 SLIDER
 14
-267
+348
 186
-300
+381
 spread_rate
 spread_rate
 10
 1000
-10.0
+100.0
 10
 1
 ticks
@@ -156,42 +180,98 @@ HORIZONTAL
 
 SLIDER
 14
-318
+399
 186
-351
+432
 spread_chance
 spread_chance
 1
 100
-1.0
+34.0
 1
 1
 %
 HORIZONTAL
 
 SLIDER
-12
-114
-194
-147
-antibiotic_interval
-antibiotic_interval
-100
+11
+133
+184
+166
+drug1_interval
+drug1_interval
+10
 1000
-1000.0
+150.0
 10
 1
 ticks
 HORIZONTAL
 
 PLOT
-696
-345
-1064
-582
-Disease Spread
-NIL
-NIL
+1104
+509
+1668
+746
+Drug Resistance
+Ticks
+Resistance Level
+0.0
+10.0
+0.0
+10.0
+true
+true
+"" ""
+PENS
+"D1" 1.0 0 -2674135 true "" "plot mean [drug1_resistance] of patches with [infected?]"
+"D2" 1.0 0 -11085214 true "" "plot mean [drug2_resistance] of patches with [infected?]"
+
+SLIDER
+12
+180
+184
+213
+drug2_interval
+drug2_interval
+10
+1000
+150.0
+10
+1
+ticks
+HORIZONTAL
+
+SWITCH
+209
+133
+348
+166
+drug1_enabled
+drug1_enabled
+0
+1
+-1000
+
+SWITCH
+210
+180
+349
+213
+drug2_enabled
+drug2_enabled
+0
+1
+-1000
+
+PLOT
+689
+514
+1077
+737
+Infected Patches
+Ticks
+Count
 0.0
 10.0
 0.0
@@ -200,7 +280,7 @@ true
 false
 "" ""
 PENS
-"default" 1.0 0 -16777216 true "" "plot count patches with [infected?]"
+"Infected" 1.0 0 -16777216 true "" "plot count patches with [infected?]"
 
 @#$#@#$#@
 ## WHAT IS IT?
