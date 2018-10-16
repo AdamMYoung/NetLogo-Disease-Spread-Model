@@ -17,7 +17,7 @@ end
 
 to setup-disease
   ask n-of initial_disease patches [
-    infect 1 1
+    infect drug1_base_resistance drug2_base_resistance
   ]
 end
 
@@ -31,11 +31,19 @@ end
 
 ;Drug toggle
 to toggle-drugs
-  let d1 drug1_tick_toggle
-  let d2 drug2_tick_toggle
+  let d1s drug1_start_tick
+  let d2s drug2_start_tick
 
-  if(d1 != 0 and d1 = ticks)[set drug1_enabled true]
-  if(d2 != 0 and d2 = ticks)[set drug2_enabled true]
+  let d1e drug1_end_tick
+  let d2e drug2_end_tick
+
+  ;Check to enable the drugs
+  if(d1s != 0 and d1s = ticks)[set drug1_enabled true]
+  if(d2s != 0 and d2s = ticks)[set drug2_enabled true]
+
+  ;Check to disable the drugs
+  if(d1e != 0 and d1e = ticks)[set drug1_enabled false]
+  if(d2e != 0 and d2e = ticks)[set drug2_enabled false]
 end
 
 ;;Applies the drugs at the specified rate.
@@ -81,7 +89,8 @@ to spread-disease
   ask patches with [infected?] [
     let d1 drug1_resistance
     let d2 drug2_resistance
-    ask patches in-radius 1 with [infected? = false] [
+    ask one-of patches with [infected? = false] [
+
       if(spread_chance > random 100)[infect d1 d2]
     ]
   ]
@@ -115,13 +124,13 @@ to-report modify-resistance [resistance]
 end
 @#$#@#$#@
 GRAPHICS-WINDOW
-1211
-35
-1652
-477
+1205
+30
+1663
+489
 -1
 -1
-2.3923
+1.87
 1
 10
 1
@@ -131,10 +140,10 @@ GRAPHICS-WINDOW
 1
 1
 1
--90
-90
--90
-90
+-120
+120
+-120
+120
 0
 0
 1
@@ -184,37 +193,37 @@ initial_disease
 initial_disease
 1
 10
-5.0
+1.0
 1
 1
 NIL
 HORIZONTAL
 
 SLIDER
-14
-399
-186
-432
+10
+260
+182
+293
 spread_rate
 spread_rate
 10
 1000
-120.0
+20.0
 10
 1
 ticks
 HORIZONTAL
 
 SLIDER
-14
-438
-186
-471
+10
+299
+182
+332
 spread_chance
 spread_chance
 1
 100
-34.0
+20.0
 1
 1
 %
@@ -222,14 +231,14 @@ HORIZONTAL
 
 SLIDER
 10
-178
+175
 183
-211
+208
 drug1_interval
 drug1_interval
 100
 10000
-400.0
+1000.0
 100
 1
 ticks
@@ -263,28 +272,28 @@ drug2_interval
 drug2_interval
 100
 10000
-500.0
+1000.0
 100
 1
 ticks
 HORIZONTAL
 
 SWITCH
+205
+175
+344
 208
-178
-347
-211
 drug1_enabled
 drug1_enabled
-0
+1
 1
 -1000
 
 SWITCH
-208
-216
-347
-249
+205
+215
+344
+248
 drug2_enabled
 drug2_enabled
 1
@@ -310,10 +319,10 @@ PENS
 "Infected" 1.0 0 -16777216 true "" "plot count patches with [infected?]"
 
 SLIDER
-15
-477
-187
-510
+11
+338
+183
+371
 mutation_chance
 mutation_chance
 0
@@ -325,23 +334,23 @@ mutation_chance
 HORIZONTAL
 
 INPUTBOX
-364
-151
-519
-211
-drug1_tick_toggle
-3000.0
+365
+150
+520
+210
+drug1_start_tick
+1000.0
 1
 0
 Number
 
 INPUTBOX
-364
-217
-519
-277
-drug2_tick_toggle
-0.0
+365
+215
+520
+275
+drug2_start_tick
+2000.0
 1
 0
 Number
@@ -355,6 +364,58 @@ Defines which tick each drug should be enabled (0 = disabled)
 14
 0.0
 1
+
+SLIDER
+10
+375
+187
+408
+drug1_base_resistance
+drug1_base_resistance
+1
+100
+5.0
+1
+1
+NIL
+HORIZONTAL
+
+SLIDER
+10
+415
+187
+448
+drug2_base_resistance
+drug2_base_resistance
+1
+100
+10.0
+1
+1
+NIL
+HORIZONTAL
+
+INPUTBOX
+525
+150
+680
+210
+drug1_end_tick
+1500.0
+1
+0
+Number
+
+INPUTBOX
+525
+215
+680
+275
+drug2_end_tick
+2500.0
+1
+0
+Number
 
 @#$#@#$#@
 ## WHAT IS IT?
