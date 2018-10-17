@@ -8,6 +8,7 @@ to setup
   reset-ticks
 end
 
+;Initializes the healthy patches.
 to setup-patches
   ask patches [
     set pcolor white
@@ -15,21 +16,28 @@ to setup-patches
   ]
 end
 
+;Initializes the disease.
 to setup-disease
   ask n-of initial_disease patches [
     infect drug1_base_resistance drug2_base_resistance
   ]
 end
 
-;;Go
+;;Performs per-tick operations in the model.
 to go
+  ;Can't run in seperate procedure as it acts like a null return rather than stopping the simulation.
+  if(stop_after_drug_course)[
+    let stop_time max list drug1_end_tick drug2_end_tick
+    if(stop_time != 0 and ticks >= stop_time) [stop]
+  ]
+
   toggle-drugs
   apply-drugs
   if(ticks mod spread_rate = 0) [spread-disease]
   tick
 end
 
-;Drug toggle
+;Toggles on/off drug application based on pre-set variables.
 to toggle-drugs
   let d1s drug1_start_tick
   let d2s drug2_start_tick
@@ -49,8 +57,8 @@ end
 ;;Applies the drugs at the specified rate.
 to apply-drugs
   if(ticks != 0) [
-  if(drug1_enabled and ticks mod drug1_interval = 0) [add-drug1]
-  if(drug2_enabled and ticks mod drug2_interval = 0) [add-drug2]
+    if(drug1_enabled and ticks mod drug1_interval = 0) [add-drug1]
+    if(drug2_enabled and ticks mod drug2_interval = 0) [add-drug2]
   ]
 end
 
@@ -125,13 +133,13 @@ to-report modify-resistance [resistance]
 end
 @#$#@#$#@
 GRAPHICS-WINDOW
-1205
-30
-1663
-489
+1155
+15
+1629
+490
 -1
 -1
-1.87
+1.452
 1
 10
 1
@@ -141,10 +149,10 @@ GRAPHICS-WINDOW
 1
 1
 1
--120
-120
--120
-120
+-160
+160
+-160
+160
 0
 0
 1
@@ -152,10 +160,10 @@ ticks
 30.0
 
 BUTTON
-11
-11
-75
-44
+15
+10
+79
+43
 Setup
 setup
 NIL
@@ -169,10 +177,10 @@ NIL
 1
 
 BUTTON
-132
-12
-195
-45
+125
+10
+188
+43
 Go
 go
 T
@@ -186,10 +194,10 @@ NIL
 1
 
 SLIDER
-11
-66
-183
-99
+15
+55
+187
+88
 initial_disease
 initial_disease
 1
@@ -201,10 +209,10 @@ NIL
 HORIZONTAL
 
 SLIDER
-10
-260
-182
-293
+15
+370
+185
+403
 spread_rate
 spread_rate
 10
@@ -216,10 +224,10 @@ ticks
 HORIZONTAL
 
 SLIDER
-10
-299
-182
-332
+15
+409
+185
+442
 spread_chance
 spread_chance
 1
@@ -231,16 +239,16 @@ spread_chance
 HORIZONTAL
 
 SLIDER
-10
-175
-183
-208
+15
+170
+188
+203
 drug1_interval
 drug1_interval
 100
 10000
-1000.0
-100
+100.0
+50
 1
 ticks
 HORIZONTAL
@@ -265,25 +273,25 @@ PENS
 "D2" 1.0 0 -11085214 true "" "plot mean [drug2_resistance] of patches with [infected?]"
 
 SLIDER
-10
-215
-182
-248
+15
+210
+187
+243
 drug2_interval
 drug2_interval
 100
 10000
 1000.0
-100
+50
 1
 ticks
 HORIZONTAL
 
 SWITCH
-205
-175
-344
-208
+210
+170
+349
+203
 drug1_enabled
 drug1_enabled
 1
@@ -291,10 +299,10 @@ drug1_enabled
 -1000
 
 SWITCH
-205
-215
-344
-248
+210
+210
+349
+243
 drug2_enabled
 drug2_enabled
 1
@@ -306,7 +314,7 @@ PLOT
 509
 1098
 746
-Infected Patches
+Infection Level
 Ticks
 Count
 0.0
@@ -320,10 +328,10 @@ PENS
 "Infected" 1.0 0 -16777216 true "" "plot count patches with [infected?]"
 
 SLIDER
-11
-338
-183
-371
+16
+448
+186
+481
 mutation_chance
 mutation_chance
 0
@@ -335,42 +343,42 @@ mutation_chance
 HORIZONTAL
 
 INPUTBOX
-365
-150
-520
-210
+370
+145
+525
+205
 drug1_start_tick
-1000.0
+0.0
 1
 0
 Number
 
 INPUTBOX
-365
-215
-520
-275
+370
+210
+525
+270
 drug2_start_tick
-2000.0
+0.0
 1
 0
 Number
 
 TEXTBOX
-369
-93
-526
-144
-Defines which tick each drug should be enabled (0 = disabled)
+425
+100
+655
+135
+Defines which tick each drug should be enabled/disabled (0 = disabled)
 14
 0.0
 1
 
 SLIDER
-10
+205
+370
 375
-187
-408
+403
 drug1_base_resistance
 drug1_base_resistance
 1
@@ -382,10 +390,10 @@ NIL
 HORIZONTAL
 
 SLIDER
-10
-415
-187
-448
+205
+410
+375
+443
 drug2_base_resistance
 drug2_base_resistance
 1
@@ -397,26 +405,57 @@ NIL
 HORIZONTAL
 
 INPUTBOX
-525
-150
-680
-210
+530
+145
+685
+205
 drug1_end_tick
-1500.0
+0.0
 1
 0
 Number
 
 INPUTBOX
-525
-215
-680
-275
+530
+210
+685
+270
 drug2_end_tick
-2500.0
+0.0
 1
 0
 Number
+
+SWITCH
+435
+280
+622
+313
+stop_after_drug_course
+stop_after_drug_course
+1
+1
+-1000
+
+TEXTBOX
+155
+135
+255
+165
+Drug Control
+16
+0.0
+1
+
+TEXTBOX
+145
+335
+260
+360
+Disease Control
+16
+0.0
+1
 
 @#$#@#$#@
 ## WHAT IS IT?
