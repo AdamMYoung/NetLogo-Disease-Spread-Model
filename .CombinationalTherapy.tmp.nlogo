@@ -3,7 +3,8 @@ turtles-own [drug1_resistance drug2_resistance infected?]
 ;; Setup
 to setup
   clear-all
-
+  set drug1_enabled false
+  set drug2_enabled false
   clear-turtles
   setup-patches
   setup-disease
@@ -16,6 +17,7 @@ to setup-patches
     set pcolor white
   ]
 end
+
 
 ;Initializes the disease.
 to setup-disease
