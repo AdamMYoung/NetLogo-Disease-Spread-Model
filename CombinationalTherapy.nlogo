@@ -35,6 +35,7 @@ to go
 
   toggle-drugs
   apply-drugs
+  if(transformation_enabled) [bacterial-transformation]
   if(ticks mod spread_rate = 0) [spread-disease]
   tick
 end
@@ -94,12 +95,30 @@ end
 
 ;;Disease
 
+;Transforms bacteria (bacterial sex) one bacteria shares its genetic information with another
+to bacterial-transformation
+  ask-concurrent turtles[
+    if(transformation_chance >= random 100)[
+      let donor_d1 drug1_resistance
+      let donor_d2 drug2_resistance
+      let recipient one-of other turtles
+      if (recipient != nobody)[
+        print "autobots roll out"
+        ask one-of other turtles[
+          set drug1_resistance random (donor_d1 - drug1_resistance) + drug1_resistance
+          set drug2_resistance random (donor_d2 - drug2_resistance) + drug2_resistance
+        ]
+      ]
+    ]
+  ]
+end
+
 ;Spreads the disease to any neigbouring patches of the current disease.
 to spread-disease
   ask-concurrent turtles with [infected?] [
     let d1 drug1_resistance
     let d2 drug2_resistance
-    if(spread_chance > random 100)[
+    if(spread_chance >= random 100)[
       hatch 1 [infect d1 d2]
     ]
   ]
@@ -204,7 +223,7 @@ initial_disease
 initial_disease
 1
 10
-1.0
+5.0
 1
 1
 NIL
@@ -234,7 +253,7 @@ spread_chance
 spread_chance
 1
 100
-100.0
+50.0
 1
 1
 %
@@ -249,7 +268,7 @@ drug1_interval
 drug1_interval
 100
 10000
-288.0
+1040.0
 1
 1
 ticks
@@ -283,7 +302,7 @@ drug2_interval
 drug2_interval
 100
 10000
-288.0
+1109.0
 1
 1
 ticks
@@ -338,7 +357,7 @@ mutation_chance
 mutation_chance
 0
 100
-0.0
+5.0
 1
 1
 %
@@ -350,7 +369,7 @@ INPUTBOX
 525
 205
 drug1_start_tick
-4032.0
+3000.0
 1
 0
 Number
@@ -361,7 +380,7 @@ INPUTBOX
 525
 270
 drug2_start_tick
-0.0
+2900.0
 1
 0
 Number
@@ -385,7 +404,7 @@ drug1_base_resistance
 drug1_base_resistance
 1
 100
-1.0
+5.0
 1
 1
 NIL
@@ -400,7 +419,7 @@ drug2_base_resistance
 drug2_base_resistance
 1
 100
-1.0
+4.0
 1
 1
 NIL
@@ -458,6 +477,32 @@ Disease Control
 16
 0.0
 1
+
+SWITCH
+425
+375
+612
+408
+transformation_enabled
+transformation_enabled
+0
+1
+-1000
+
+SLIDER
+425
+415
+617
+448
+transformation_chance
+transformation_chance
+0
+100
+10.0
+1
+1
+%
+HORIZONTAL
 
 @#$#@#$#@
 ## WHAT IS IT?
@@ -801,7 +846,7 @@ false
 Polygon -7500403 true true 270 75 225 30 30 225 75 270
 Polygon -7500403 true true 30 75 75 30 270 225 225 270
 @#$#@#$#@
-NetLogo 6.0.4
+NetLogo 6.0.1
 @#$#@#$#@
 @#$#@#$#@
 @#$#@#$#@
