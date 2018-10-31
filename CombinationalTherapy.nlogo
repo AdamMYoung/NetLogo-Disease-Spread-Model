@@ -5,22 +5,15 @@ to setup
   clear-all
   set drug1_enabled false
   set drug2_enabled false
-  clear-turtles
-  setup-patches
+  ask patches [set pcolor white]
   setup-disease
   reset-ticks
-end
-
-to setup-patches
-  ask patches [
-    set pcolor white
-  ]
 end
 
 ;Initializes the disease.
 to setup-disease
   create-turtles initial_disease_count [
-    initialise-disease
+    initialise-bacteria
     random-range drug1_base_resistance_min drug1_base_resistance_max
     random-range drug2_base_resistance_min drug2_base_resistance_max
   ]
@@ -28,34 +21,36 @@ end
 
 ;;Performs per-tick operations in the model.
 to go
-  ;Can't run in seperate procedure as it acts like a null return rather than stopping the simulation.
-  if(stop_after_drug_course)[
-    let stop_time max list drug1_end_tick drug2_end_tick
-    if(stop_time != 0 and ticks >= stop_time) [stop]
-  ]
+  if((count turtles = 0) or stop-after-drug-course-check)[stop]
 
   toggle-drugs
   apply-drugs
+
   if(transformation_enabled) [bacterial-transformation]
   if(ticks mod spread_rate = 0) [spread-disease]
   tick
 end
 
+;check to see if program should be stopped after the course
+to-report stop-after-drug-course-check
+  ifelse(stop_after_drug_course)[
+    let stop_time max list drug1_end_tick drug2_end_tick
+    ifelse(stop_time != 0 and ticks >= stop_time)
+    [report true]
+    [report false]
+  ]
+  [report false]
+end
+
 ;Toggles on/off drug application based on pre-set variables.
 to toggle-drugs
-  let d1s drug1_start_tick
-  let d2s drug2_start_tick
-
-  let d1e drug1_end_tick
-  let d2e drug2_end_tick
-
   ;Check to enable the drugs
-  if(d1s != 0 and d1s = ticks)[set drug1_enabled true]
-  if(d2s != 0 and d2s = ticks)[set drug2_enabled true]
+  if(drug1_start_tick != 0 and drug1_start_tick = ticks)[set drug1_enabled true]
+  if(drug2_start_tick != 0 and drug2_start_tick = ticks)[set drug2_enabled true]
 
   ;Check to disable the drugs
-  if(d1e != 0 and d1e = ticks)[set drug1_enabled false]
-  if(d2e != 0 and d2e = ticks)[set drug2_enabled false]
+  if(drug1_end_tick != 0 and drug1_end_tick = ticks)[set drug1_enabled false]
+  if(drug2_end_tick != 0 and drug2_end_tick = ticks)[set drug2_enabled false]
 end
 
 ;;Applies the drugs at the specified rate.
@@ -108,13 +103,11 @@ end
 ;Spreads the disease to any neigbouring patches of the current disease.
 to spread-disease
   ask-concurrent turtles[
-    if(spread_chance >= random 100)[
-      hatch 1 [initialise-disease drug1_resistance drug2_resistance]
-    ]
+    if(spread_chance >= random 100)[hatch 1 [initialise-bacteria drug1_resistance drug2_resistance]]
   ]
 end
 
-to initialise-disease[d1_resistance d2_resistance]
+to initialise-bacteria[d1_resistance d2_resistance]
   set color red
   set xcor random-xcor
   set ycor random-ycor
@@ -237,9 +230,9 @@ HORIZONTAL
 
 SLIDER
 15
-409
+410
 185
-442
+443
 spread_chance
 spread_chance
 1
@@ -259,7 +252,7 @@ drug1_interval
 drug1_interval
 100
 10000
-1040.0
+539.0
 1
 1
 ticks
@@ -293,7 +286,7 @@ drug2_interval
 drug2_interval
 100
 10000
-1109.0
+100.0
 1
 1
 ticks
@@ -306,7 +299,7 @@ SWITCH
 203
 drug1_enabled
 drug1_enabled
-1
+0
 1
 -1000
 
@@ -340,10 +333,10 @@ PENS
 "Infected" 1.0 0 -16777216 true "" "plot count turtles"
 
 SLIDER
-16
-448
-186
-481
+15
+450
+185
+483
 mutation_chance
 mutation_chance
 0
@@ -360,7 +353,7 @@ INPUTBOX
 500
 205
 drug1_start_tick
-3000.0
+2000.0
 1
 0
 Number
@@ -371,7 +364,7 @@ INPUTBOX
 500
 270
 drug2_start_tick
-2900.0
+0.0
 1
 0
 Number
