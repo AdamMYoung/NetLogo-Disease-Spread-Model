@@ -26,8 +26,11 @@ to go
   toggle-drugs
   apply-drugs
 
-  if(transformation_enabled) [bacterial-transformation]
-  if(ticks mod spread_rate = 0) [spread-disease]
+  ask-concurrent turtles[
+    if(transformation_enabled) [bacterial-transformation]
+    if(ticks mod spread_rate = 0) [spread-disease]
+  ]
+
   tick
 end
 
@@ -85,16 +88,14 @@ end
 
 ;Transforms bacteria (bacterial sex) one bacteria shares its genetic information with another
 to bacterial-transformation
-  ask-concurrent turtles[
-    if(transformation_chance >= random 100)[
-      let donor_d1 drug1_resistance
-      let donor_d2 drug2_resistance
-      let recipient one-of other turtles
-      if (recipient != nobody)[
-        ask one-of other turtles[
-          if(donor_d1 > drug1_resistance)[set drug1_resistance random-range drug1_resistance donor_d1]
-          if(donor_d2 > drug2_resistance)[set drug2_resistance random-range drug2_resistance donor_d2]
-        ]
+  if(transformation_chance >= random 100)[
+    let donor_d1 drug1_resistance
+    let donor_d2 drug2_resistance
+    let recipient one-of other turtles
+    if (recipient != nobody)[
+      ask one-of other turtles[
+        if(donor_d1 > drug1_resistance)[set drug1_resistance random-range drug1_resistance donor_d1]
+        if(donor_d2 > drug2_resistance)[set drug2_resistance random-range drug2_resistance donor_d2]
       ]
     ]
   ]
@@ -102,9 +103,7 @@ end
 
 ;Spreads the disease to any neigbouring patches of the current disease.
 to spread-disease
-  ask-concurrent turtles[
-    if(spread_chance >= random 100)[hatch 1 [initialise-bacteria drug1_resistance drug2_resistance]]
-  ]
+  if(spread_chance >= random 100)[hatch 1 [initialise-bacteria drug1_resistance drug2_resistance]]
 end
 
 to initialise-bacteria[d1_resistance d2_resistance]
