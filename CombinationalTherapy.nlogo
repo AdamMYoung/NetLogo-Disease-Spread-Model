@@ -19,8 +19,10 @@ end
 
 ;Initializes the disease.
 to setup-disease
-  create-turtles initial_disease [
-    infect drug1_base_resistance drug2_base_resistance
+  create-turtles initial_disease_count [
+    initialise-disease
+    random-range drug1_base_resistance_min drug1_base_resistance_max
+    random-range drug2_base_resistance_min drug2_base_resistance_max
   ]
 end
 
@@ -94,10 +96,9 @@ to bacterial-transformation
       let donor_d2 drug2_resistance
       let recipient one-of other turtles
       if (recipient != nobody)[
-        print "autobots roll out"
         ask one-of other turtles[
-          set drug1_resistance random (donor_d1 - drug1_resistance) + drug1_resistance
-          set drug2_resistance random (donor_d2 - drug2_resistance) + drug2_resistance
+          if(donor_d1 > drug1_resistance)[set drug1_resistance random-range drug1_resistance donor_d1]
+          if(donor_d2 > drug2_resistance)[set drug2_resistance random-range drug2_resistance donor_d2]
         ]
       ]
     ]
@@ -107,16 +108,13 @@ end
 ;Spreads the disease to any neigbouring patches of the current disease.
 to spread-disease
   ask-concurrent turtles[
-    let d1 drug1_resistance
-    let d2 drug2_resistance
     if(spread_chance >= random 100)[
-      hatch 1 [infect d1 d2]
+      hatch 1 [initialise-disease drug1_resistance drug2_resistance]
     ]
   ]
 end
 
-;Sets the selected bacteria to the infected status.
-to infect[d1_resistance d2_resistance]
+to initialise-disease[d1_resistance d2_resistance]
   set color red
   set xcor random-xcor
   set ycor random-ycor
@@ -126,21 +124,24 @@ end
 
 ;Applies a mutation factor to the passed in resistance based on the mutation chance variable.
 to-report modify-resistance [resistance]
-
   ifelse(mutation_chance > random 100) [
-    let res resistance
+    let modified_resistance resistance
     let rand random 2
 
     ifelse(rand = 0)
-    [set res res - 1]
-    [set res res + 1]
+    [set modified_resistance modified_resistance - 1]
+    [set modified_resistance modified_resistance + 1]
 
-    if(res < 0)[set res 0]
-    if(res > 100)[set res 100]
+    if(modified_resistance < 0)[set modified_resistance 0]
+    if(modified_resistance > 100)[set modified_resistance 100]
 
-    report res
+    report modified_resistance
   ]
   [report resistance]
+end
+
+to-report random-range [min-range max-range]
+  report random (max-range - min-range) + min-range
 end
 @#$#@#$#@
 GRAPHICS-WINDOW
@@ -209,8 +210,8 @@ SLIDER
 55
 187
 88
-initial_disease
-initial_disease
+initial_disease_count
+initial_disease_count
 1
 10
 5.0
@@ -280,8 +281,8 @@ true
 true
 "" ""
 PENS
-"D1" 1.0 0 -2674135 true "" "plot mean [drug1_resistance] of turtles with [infected?]"
-"D2" 1.0 0 -11085214 true "" "plot mean [drug2_resistance] of turtles with [infected?]"
+"D1" 1.0 0 -2674135 true "" "plot mean [drug1_resistance] of turtles"
+"D2" 1.0 0 -11085214 true "" "plot mean [drug2_resistance] of turtles"
 
 SLIDER
 15
@@ -299,9 +300,9 @@ ticks
 HORIZONTAL
 
 SWITCH
-210
+195
 170
-349
+334
 203
 drug1_enabled
 drug1_enabled
@@ -310,9 +311,9 @@ drug1_enabled
 -1000
 
 SWITCH
+195
 210
-210
-349
+334
 243
 drug2_enabled
 drug2_enabled
@@ -336,7 +337,7 @@ true
 false
 "" ""
 PENS
-"Infected" 1.0 0 -16777216 true "" "plot count turtles with [infected?]"
+"Infected" 1.0 0 -16777216 true "" "plot count turtles"
 
 SLIDER
 16
@@ -354,9 +355,9 @@ mutation_chance
 HORIZONTAL
 
 INPUTBOX
-370
+345
 145
-525
+500
 205
 drug1_start_tick
 3000.0
@@ -365,9 +366,9 @@ drug1_start_tick
 Number
 
 INPUTBOX
-370
+345
 210
-525
+500
 270
 drug2_start_tick
 2900.0
@@ -376,22 +377,22 @@ drug2_start_tick
 Number
 
 TEXTBOX
-425
-100
-655
-135
+400
+105
+630
+140
 Defines which tick each drug should be enabled/disabled (0 = disabled)
 14
 0.0
 1
 
 SLIDER
-205
+195
 370
-375
+365
 403
-drug1_base_resistance
-drug1_base_resistance
+drug1_base_resistance_min
+drug1_base_resistance_min
 1
 100
 5.0
@@ -401,12 +402,12 @@ NIL
 HORIZONTAL
 
 SLIDER
-205
+195
 410
-375
+365
 443
-drug2_base_resistance
-drug2_base_resistance
+drug2_base_resistance_min
+drug2_base_resistance_min
 1
 100
 4.0
@@ -416,9 +417,9 @@ NIL
 HORIZONTAL
 
 INPUTBOX
-530
+505
 145
-685
+660
 205
 drug1_end_tick
 0.0
@@ -427,9 +428,9 @@ drug1_end_tick
 Number
 
 INPUTBOX
-530
+505
 210
-685
+660
 270
 drug2_end_tick
 0.0
@@ -438,10 +439,10 @@ drug2_end_tick
 Number
 
 SWITCH
-435
-280
-622
-313
+410
+275
+597
+308
 stop_after_drug_course
 stop_after_drug_course
 1
@@ -469,10 +470,10 @@ Disease Control
 1
 
 SWITCH
-425
-375
-612
-408
+195
+450
+365
+483
 transformation_enabled
 transformation_enabled
 0
@@ -480,18 +481,48 @@ transformation_enabled
 -1000
 
 SLIDER
-425
-415
-617
-448
+375
+450
+545
+483
 transformation_chance
 transformation_chance
+0
+100
+11.0
+1
+1
+%
+HORIZONTAL
+
+SLIDER
+375
+370
+545
+403
+drug1_base_resistance_max
+drug1_base_resistance_max
 0
 100
 10.0
 1
 1
-%
+NIL
+HORIZONTAL
+
+SLIDER
+375
+410
+545
+443
+drug2_base_resistance_max
+drug2_base_resistance_max
+0
+100
+10.0
+1
+1
+NIL
 HORIZONTAL
 
 @#$#@#$#@
