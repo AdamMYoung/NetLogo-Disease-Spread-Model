@@ -56,8 +56,8 @@ end
 ;;Applies the drugs at the specified rate.
 to apply-drugs
   if(ticks != 0) [
-    if(drug1_enabled and ticks mod drug1_interval = 0) [add-drug1]
-    if(drug2_enabled and ticks mod drug2_interval = 0) [add-drug2]
+    if(drug1_enabled and (ticks - drug1_start_tick) mod drug1_interval = 0) [add-drug1]
+    if(drug2_enabled and (ticks - drug2_start_tick) mod drug2_interval = 0) [add-drug2]
   ]
 end
 
