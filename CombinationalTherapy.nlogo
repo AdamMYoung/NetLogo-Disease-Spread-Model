@@ -11,7 +11,6 @@ to setup
   reset-ticks
 end
 
-;Initializes the healthy patches.
 to setup-patches
   ask patches [
     set pcolor white
@@ -69,7 +68,7 @@ end
 
 ;Applies a drug effect to the simulation.
 to add-drug1
-  ask-concurrent turtles with [infected?] [
+  ask-concurrent turtles[
     ifelse(drug1_resistance < random 100)
     [die]
     [if(drug1_resistance != 100) [set drug1_resistance drug1_resistance + 1]]
@@ -78,19 +77,11 @@ end
 
 ;Applies a drug effect to the simulation.
 to add-drug2
-  ask-concurrent turtles with [infected?] [
+  ask-concurrent turtles[
     ifelse(drug2_resistance < random 100)
     [die]
     [if(drug2_resistance != 100) [set drug2_resistance drug2_resistance + 1]]
   ]
-end
-
-;Sets the selected path to the cured status.
-to cure
-  set pcolor white
-  set infected? false
-  set drug1_resistance 0
-  set drug2_resistance 0
 end
 
 ;;Disease
@@ -115,7 +106,7 @@ end
 
 ;Spreads the disease to any neigbouring patches of the current disease.
 to spread-disease
-  ask-concurrent turtles with [infected?] [
+  ask-concurrent turtles[
     let d1 drug1_resistance
     let d2 drug2_resistance
     if(spread_chance >= random 100)[
@@ -846,7 +837,7 @@ false
 Polygon -7500403 true true 270 75 225 30 30 225 75 270
 Polygon -7500403 true true 30 75 75 30 270 225 225 270
 @#$#@#$#@
-NetLogo 6.0.1
+NetLogo 6.0.4
 @#$#@#$#@
 @#$#@#$#@
 @#$#@#$#@
