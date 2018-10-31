@@ -1,4 +1,4 @@
-turtles-own [drug1_resistance drug2_resistance infected?]
+turtles-own [drug1_resistance drug2_resistance]
 
 ;; Setup
 to setup
@@ -115,10 +115,9 @@ to spread-disease
   ]
 end
 
-;Sets the selected patch to the infected status.
+;Sets the selected bacteria to the infected status.
 to infect[d1_resistance d2_resistance]
   set color red
-  set infected? true
   set xcor random-xcor
   set ycor random-ycor
   set drug1_resistance modify-resistance d1_resistance
