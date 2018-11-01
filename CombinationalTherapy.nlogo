@@ -71,7 +71,7 @@ to add-drug1
   ask-concurrent turtles[
     ifelse(drug1_resistance < random 100)
     [die]
-    [if(drug1_resistance != 100) [set drug1_resistance drug1_resistance + 1]]
+    [if(drug1_resistance != 100) [set drug1_resistance drug1_resistance + random drug1_max_resistance_gain]]
   ]
 end
 
@@ -80,7 +80,7 @@ to add-drug2
   ask-concurrent turtles[
     ifelse(drug2_resistance < random 100)
     [die]
-    [if(drug2_resistance != 100) [set drug2_resistance drug2_resistance + 1]]
+    [if(drug2_resistance != 100) [set drug2_resistance drug2_resistance + random drug2_max_resistance_gain]]
   ]
 end
 
@@ -110,12 +110,12 @@ to initialise-bacteria[d1_resistance d2_resistance]
   set color red
   set xcor random-xcor
   set ycor random-ycor
-  set drug1_resistance modify-resistance d1_resistance
-  set drug2_resistance modify-resistance d2_resistance
+  set drug1_resistance mutate-resistance d1_resistance
+  set drug2_resistance mutate-resistance d2_resistance
 end
 
 ;Applies a mutation factor to the passed in resistance based on the mutation chance variable.
-to-report modify-resistance [resistance]
+to-report mutate-resistance [resistance]
   ifelse(mutation_chance > random 100) [
     let modified_resistance resistance
     let rand random 2
@@ -137,13 +137,13 @@ to-report random-range [min-range max-range]
 end
 @#$#@#$#@
 GRAPHICS-WINDOW
-1195
-15
-1664
-485
+1135
+10
+1568
+444
 -1
 -1
-1.794
+1.654
 1
 10
 1
@@ -213,10 +213,10 @@ NIL
 HORIZONTAL
 
 SLIDER
-15
-370
-185
-403
+30
+340
+200
+373
 spread_rate
 spread_rate
 10
@@ -228,10 +228,10 @@ ticks
 HORIZONTAL
 
 SLIDER
-15
-410
-185
-443
+210
+340
+380
+373
 spread_chance
 spread_chance
 1
@@ -243,26 +243,26 @@ spread_chance
 HORIZONTAL
 
 SLIDER
-15
-170
-188
+30
+180
 203
+213
 drug1_interval
 drug1_interval
 100
 10000
-539.0
+1541.0
 1
 1
 ticks
 HORIZONTAL
 
 PLOT
-1104
-509
-1668
-746
-Drug Resistance
+685
+455
+1125
+775
+Mean Drug Resistance
 Ticks
 Resistance Level
 0.0
@@ -273,14 +273,14 @@ true
 true
 "" ""
 PENS
-"D1" 1.0 0 -2674135 true "" "plot mean [drug1_resistance] of turtles"
-"D2" 1.0 0 -11085214 true "" "plot mean [drug2_resistance] of turtles"
+"Drug 1" 1.0 0 -2674135 true "" "plot mean [drug1_resistance] of turtles"
+"Drug 2" 1.0 0 -13345367 true "" "plot mean [drug2_resistance] of turtles"
 
 SLIDER
-15
-210
-187
-243
+30
+220
+202
+253
 drug2_interval
 drug2_interval
 100
@@ -292,10 +292,10 @@ ticks
 HORIZONTAL
 
 SWITCH
-195
-170
-334
-203
+210
+180
+349
+213
 drug1_enabled
 drug1_enabled
 0
@@ -303,10 +303,10 @@ drug1_enabled
 -1000
 
 SWITCH
-195
 210
-334
-243
+220
+349
+253
 drug2_enabled
 drug2_enabled
 1
@@ -314,10 +314,10 @@ drug2_enabled
 -1000
 
 PLOT
-687
-509
-1098
-746
+685
+10
+1125
+280
 Infection Level
 Ticks
 Count
@@ -332,10 +332,10 @@ PENS
 "Infected" 1.0 0 -16777216 true "" "plot count turtles"
 
 SLIDER
-15
-450
-185
-483
+30
+460
+200
+493
 mutation_chance
 mutation_chance
 0
@@ -347,10 +347,10 @@ mutation_chance
 HORIZONTAL
 
 INPUTBOX
-345
-145
-500
-205
+360
+155
+515
+215
 drug1_start_tick
 2000.0
 1
@@ -358,10 +358,10 @@ drug1_start_tick
 Number
 
 INPUTBOX
-345
-210
-500
-270
+360
+220
+515
+280
 drug2_start_tick
 0.0
 1
@@ -369,24 +369,24 @@ drug2_start_tick
 Number
 
 TEXTBOX
-400
-105
-630
-140
+415
+115
+645
+150
 Defines which tick each drug should be enabled/disabled (0 = disabled)
 14
 0.0
 1
 
 SLIDER
-195
-370
-365
-403
+30
+380
+200
+413
 drug1_base_resistance_min
 drug1_base_resistance_min
 1
-100
+drug1_base_resistance_max
 5.0
 1
 1
@@ -394,14 +394,14 @@ NIL
 HORIZONTAL
 
 SLIDER
-195
-410
-365
-443
+30
+420
+200
+453
 drug2_base_resistance_min
 drug2_base_resistance_min
 1
-100
+drug2_base_resistance_max
 4.0
 1
 1
@@ -409,10 +409,10 @@ NIL
 HORIZONTAL
 
 INPUTBOX
-505
-145
-660
-205
+520
+155
+675
+215
 drug1_end_tick
 0.0
 1
@@ -420,10 +420,10 @@ drug1_end_tick
 Number
 
 INPUTBOX
-505
-210
-660
-270
+520
+220
+675
+280
 drug2_end_tick
 0.0
 1
@@ -431,10 +431,10 @@ drug2_end_tick
 Number
 
 SWITCH
-410
-275
-597
-308
+425
+285
+612
+318
 stop_after_drug_course
 stop_after_drug_course
 1
@@ -442,41 +442,41 @@ stop_after_drug_course
 -1000
 
 TEXTBOX
-155
-135
-255
-165
+170
+145
+270
+175
 Drug Control
 16
 0.0
 1
 
 TEXTBOX
-145
-335
-260
-360
+160
+305
+275
+330
 Disease Control
 16
 0.0
 1
 
 SWITCH
-195
-450
-365
-483
+30
+500
+200
+533
 transformation_enabled
 transformation_enabled
-0
+1
 1
 -1000
 
 SLIDER
-375
-450
-545
-483
+210
+500
+380
+533
 transformation_chance
 transformation_chance
 0
@@ -488,30 +488,158 @@ transformation_chance
 HORIZONTAL
 
 SLIDER
-375
-370
-545
-403
+210
+380
+380
+413
 drug1_base_resistance_max
 drug1_base_resistance_max
-0
+drug1_base_resistance_min
 100
-10.0
+13.0
 1
 1
 NIL
 HORIZONTAL
 
 SLIDER
-375
-410
-545
-443
+210
+420
+380
+453
 drug2_base_resistance_max
 drug2_base_resistance_max
+drug1_base_resistance_min
+100
+11.0
+1
+1
+NIL
+HORIZONTAL
+
+MONITOR
+835
+290
+975
+335
+Infection Level
+count turtles
+17
+1
+11
+
+MONITOR
+835
+345
+975
+390
+Drug 1 Mean Resistance
+mean [drug1_resistance] of turtles
+17
+1
+11
+
+MONITOR
+835
+400
+975
+445
+Drug 2 Mean Resistance
+mean [drug2_resistance] of turtles
+17
+1
+11
+
+MONITOR
+685
+345
+825
+390
+Drug 1 Min Resistance
+min [drug1_resistance] of turtles
+17
+1
+11
+
+MONITOR
+685
+400
+825
+445
+Drug 2 Min Resistance
+min [drug2_resistance] of turtles
+17
+1
+11
+
+MONITOR
+985
+345
+1125
+390
+Drug 1 Max Resistance
+max [drug1_resistance] of turtles
+17
+1
+11
+
+MONITOR
+985
+400
+1125
+445
+Drug 2 Max Resistance
+max [drug2_resistance] of turtles
+17
+1
+11
+
+PLOT
+1135
+455
+1575
+775
+Min/Max Drug Resistance
+NIL
+NIL
+0.0
+10.0
+0.0
+10.0
+true
+true
+"" ""
+PENS
+"Drug 1 Max" 1.0 0 -955883 true "" "plot max [drug1_resistance] of turtles"
+"Drug 1 Min" 1.0 0 -1184463 true "" "plot min [drug1_resistance] of turtles"
+"Drug 2 Max" 1.0 0 -13840069 true "" "plot max [drug2_resistance] of turtles"
+"Drug 2 Min" 1.0 0 -11221820 true "" "plot min [drug2_resistance] of turtles"
+
+SLIDER
+390
+380
+560
+413
+drug1_max_resistance_gain
+drug1_max_resistance_gain
 0
 100
-10.0
+5.0
+1
+1
+NIL
+HORIZONTAL
+
+SLIDER
+390
+420
+560
+453
+drug2_max_resistance_gain
+drug2_max_resistance_gain
+0
+100
+3.0
 1
 1
 NIL
