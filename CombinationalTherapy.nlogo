@@ -121,8 +121,8 @@ to-report mutate-resistance [resistance]
     let rand random 2
 
     ifelse(rand = 0)
-    [set modified_resistance modified_resistance - 1]
-    [set modified_resistance modified_resistance + 1]
+    [set modified_resistance modified_resistance - range_of_mutation]
+    [set modified_resistance modified_resistance + range_of_mutation]
 
     if(modified_resistance < 0)[set modified_resistance 0]
     if(modified_resistance > 100)[set modified_resistance 100]
@@ -206,7 +206,7 @@ initial_disease_count
 initial_disease_count
 1
 10
-5.0
+6.0
 1
 1
 NIL
@@ -251,7 +251,7 @@ drug1_interval
 drug1_interval
 100
 10000
-1541.0
+1544.0
 1
 1
 ticks
@@ -298,7 +298,7 @@ SWITCH
 213
 drug1_enabled
 drug1_enabled
-0
+1
 1
 -1000
 
@@ -496,7 +496,7 @@ drug1_base_resistance_max
 drug1_base_resistance_max
 drug1_base_resistance_min
 100
-13.0
+6.0
 1
 1
 NIL
@@ -640,6 +640,21 @@ drug2_max_resistance_gain
 0
 100
 3.0
+1
+1
+NIL
+HORIZONTAL
+
+SLIDER
+210
+460
+382
+493
+range_of_mutation
+range_of_mutation
+0
+100
+2.0
 1
 1
 NIL
