@@ -84,6 +84,21 @@ to add-drug2
   ]
 end
 
+;monitors the number of drugs use during course to see the effect of drug
+to-report number-of-drug1-use
+  let number_of_drug1_use (ticks - drug1_start_tick) / drug1_interval
+  if(number_of_drug1_use < 0)[set number_of_drug1_use 0]
+  if(drug1_start_tick = 0 and drug1_end_tick = 0)[set number_of_drug1_use 0]
+  report number_of_drug1_use
+end
+
+to-report number-of-drug2-use
+  let number_of_drug2_use (ticks - drug2_start_tick) / drug2_interval
+  if(number_of_drug2_use < 0)[set number_of_drug2_use 0]
+  if(drug2_start_tick = 0 and drug2_end_tick = 0)[set number_of_drug2_use 0]
+  report number_of_drug2_use
+end
+
 ;;Disease
 
 ;Transforms bacteria (bacterial sex) one bacteria shares its genetic information with another
@@ -206,7 +221,7 @@ initial_disease_count
 initial_disease_count
 1
 10
-6.0
+10.0
 1
 1
 NIL
@@ -348,9 +363,9 @@ HORIZONTAL
 
 INPUTBOX
 360
-155
+95
 515
-215
+155
 drug1_start_tick
 2000.0
 1
@@ -359,9 +374,9 @@ Number
 
 INPUTBOX
 360
-220
+160
 515
-280
+220
 drug2_start_tick
 0.0
 1
@@ -370,9 +385,9 @@ Number
 
 TEXTBOX
 415
-115
+55
 645
-150
+90
 Defines which tick each drug should be enabled/disabled (0 = disabled)
 14
 0.0
@@ -410,9 +425,9 @@ HORIZONTAL
 
 INPUTBOX
 520
-155
+95
 675
-215
+155
 drug1_end_tick
 0.0
 1
@@ -421,9 +436,9 @@ Number
 
 INPUTBOX
 520
-220
+160
 675
-280
+220
 drug2_end_tick
 0.0
 1
@@ -437,7 +452,7 @@ SWITCH
 318
 stop_after_drug_course
 stop_after_drug_course
-1
+0
 1
 -1000
 
@@ -659,6 +674,28 @@ range_of_mutation
 1
 NIL
 HORIZONTAL
+
+MONITOR
+360
+225
+515
+270
+Number of Drug1 Use
+number-of-drug1-use
+0
+1
+11
+
+MONITOR
+520
+225
+675
+270
+Number of Drug2 Use
+number-of-drug2-use
+0
+1
+11
 
 @#$#@#$#@
 ## WHAT IS IT?
