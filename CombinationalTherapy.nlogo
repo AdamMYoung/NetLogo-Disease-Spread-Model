@@ -69,8 +69,8 @@ end
 ;Toggles on/off drug application based on pre-set variables.
 to toggle-drugs
   ;Check to enable the drugs
-  if(drug1_enabled and drug1_start_tick != 0 and drug1_start_tick = ticks)[set drug1_trigger true]
-  if(drug2_enabled and drug2_start_tick != 0 and drug2_start_tick = ticks)[set drug2_trigger true]
+  if(drug1_enabled and drug1_start_tick = ticks)[set drug1_trigger true]
+  if(drug2_enabled and drug2_start_tick = ticks)[set drug2_trigger true]
 
   ;Check to disable the drugs
   if(drug1_end_tick != 0 and drug1_end_tick = ticks)[set drug1_trigger false]
