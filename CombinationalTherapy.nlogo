@@ -1,8 +1,23 @@
 turtles-own [drug1_resistance drug2_resistance]
 
-;; Setup
+;;_Setup________________________________________
+
+to refresh-seed
+  set seed new-seed
+end
+
+to set-seed
+  random-seed seed
+end
+
+to setup-with-refresh-seed
+  refresh-seed
+  setup
+end
+
 to setup
   clear-all
+  set-seed
   set drug1_enabled false
   set drug2_enabled false
   ask patches [set pcolor white]
@@ -19,6 +34,8 @@ to setup-disease
   ]
 end
 
+;;_Go________________________________________
+
 ;;Performs per-tick operations in the model.
 to go
   if((count turtles = 0) or stop-after-drug-course-check)[stop]
@@ -33,6 +50,8 @@ to go
 
   tick
 end
+
+;;_Drugs________________________________________
 
 ;check to see if program should be stopped after the course
 to-report stop-after-drug-course-check
@@ -99,7 +118,7 @@ to-report number-of-drug2-use
   report number_of_drug2_use
 end
 
-;;Disease
+;;_Disease________________________________________
 
 ;Transforms bacteria (bacterial sex) one bacteria shares its genetic information with another
 to bacterial-transformation
@@ -147,14 +166,16 @@ to-report mutate-resistance [resistance]
   [report resistance]
 end
 
+;;_Helpers________________________________________
+
 to-report random-range [min-range max-range]
   report random (max-range - min-range) + min-range
 end
 @#$#@#$#@
 GRAPHICS-WINDOW
-1135
+1020
 10
-1568
+1453
 444
 -1
 -1
@@ -179,10 +200,10 @@ ticks
 30.0
 
 BUTTON
-15
 10
-79
-43
+285
+75
+318
 Setup
 setup
 NIL
@@ -196,10 +217,10 @@ NIL
 1
 
 BUTTON
-125
-10
-188
-43
+90
+285
+155
+318
 Go
 go
 T
@@ -213,10 +234,10 @@ NIL
 1
 
 SLIDER
-15
-55
-187
-88
+10
+80
+155
+113
 initial_disease_count
 initial_disease_count
 1
@@ -228,10 +249,10 @@ NIL
 HORIZONTAL
 
 SLIDER
-30
-340
-200
-373
+10
+490
+180
+523
 spread_rate
 spread_rate
 10
@@ -243,10 +264,10 @@ ticks
 HORIZONTAL
 
 SLIDER
-210
-340
-380
-373
+190
+490
+360
+523
 spread_chance
 spread_chance
 1
@@ -258,24 +279,24 @@ spread_chance
 HORIZONTAL
 
 SLIDER
-30
-180
-203
-213
+190
+80
+360
+113
 drug1_interval
 drug1_interval
 100
 10000
-1544.0
+1545.0
 1
 1
 ticks
 HORIZONTAL
 
 PLOT
-685
+570
 455
-1125
+1010
 775
 Mean Drug Resistance
 Ticks
@@ -292,10 +313,10 @@ PENS
 "Drug 2" 1.0 0 -13345367 true "" "plot mean [drug2_resistance] of turtles"
 
 SLIDER
-30
-220
-202
-253
+190
+120
+360
+153
 drug2_interval
 drug2_interval
 100
@@ -307,21 +328,21 @@ ticks
 HORIZONTAL
 
 SWITCH
-210
-180
-349
-213
+370
+80
+540
+113
 drug1_enabled
 drug1_enabled
-1
+0
 1
 -1000
 
 SWITCH
-210
-220
-349
-253
+370
+120
+540
+153
 drug2_enabled
 drug2_enabled
 1
@@ -329,9 +350,9 @@ drug2_enabled
 -1000
 
 PLOT
-685
+570
 10
-1125
+1010
 280
 Infection Level
 Ticks
@@ -347,10 +368,10 @@ PENS
 "Infected" 1.0 0 -16777216 true "" "plot count turtles"
 
 SLIDER
-30
-460
-200
-493
+10
+610
+180
+643
 mutation_chance
 mutation_chance
 0
@@ -362,10 +383,10 @@ mutation_chance
 HORIZONTAL
 
 INPUTBOX
-360
-95
-515
-155
+190
+205
+355
+265
 drug1_start_tick
 2000.0
 1
@@ -373,10 +394,10 @@ drug1_start_tick
 Number
 
 INPUTBOX
-360
-160
-515
-220
+365
+205
+540
+265
 drug2_start_tick
 0.0
 1
@@ -384,20 +405,20 @@ drug2_start_tick
 Number
 
 TEXTBOX
-415
-55
-645
-90
+255
+160
+495
+195
 Defines which tick each drug should be enabled/disabled (0 = disabled)
 14
 0.0
 1
 
 SLIDER
-30
-380
-200
-413
+10
+530
+180
+563
 drug1_base_resistance_min
 drug1_base_resistance_min
 1
@@ -409,10 +430,10 @@ NIL
 HORIZONTAL
 
 SLIDER
-30
-420
-200
-453
+10
+570
+180
+603
 drug2_base_resistance_min
 drug2_base_resistance_min
 1
@@ -424,10 +445,10 @@ NIL
 HORIZONTAL
 
 INPUTBOX
-520
-95
-675
-155
+190
+275
+355
+335
 drug1_end_tick
 0.0
 1
@@ -435,10 +456,10 @@ drug1_end_tick
 Number
 
 INPUTBOX
-520
-160
-675
-220
+365
+275
+540
+335
 drug2_end_tick
 0.0
 1
@@ -446,10 +467,10 @@ drug2_end_tick
 Number
 
 SWITCH
-425
-285
-612
-318
+190
+400
+540
+433
 stop_after_drug_course
 stop_after_drug_course
 0
@@ -457,30 +478,30 @@ stop_after_drug_course
 -1000
 
 TEXTBOX
-170
-145
-270
-175
+325
+45
+425
+65
 Drug Control
 16
 0.0
 1
 
 TEXTBOX
-160
-305
-275
-330
+135
+460
+250
+485
 Disease Control
 16
 0.0
 1
 
 SWITCH
-30
-500
-200
-533
+10
+650
+180
+683
 transformation_enabled
 transformation_enabled
 1
@@ -488,10 +509,10 @@ transformation_enabled
 -1000
 
 SLIDER
-210
-500
-380
-533
+190
+650
+360
+683
 transformation_chance
 transformation_chance
 0
@@ -503,10 +524,10 @@ transformation_chance
 HORIZONTAL
 
 SLIDER
-210
-380
-380
-413
+190
+530
+360
+563
 drug1_base_resistance_max
 drug1_base_resistance_max
 drug1_base_resistance_min
@@ -518,10 +539,10 @@ NIL
 HORIZONTAL
 
 SLIDER
-210
-420
-380
-453
+190
+570
+360
+603
 drug2_base_resistance_max
 drug2_base_resistance_max
 drug1_base_resistance_min
@@ -533,9 +554,9 @@ NIL
 HORIZONTAL
 
 MONITOR
-835
+720
 290
-975
+860
 335
 Infection Level
 count turtles
@@ -544,9 +565,9 @@ count turtles
 11
 
 MONITOR
-835
+720
 345
-975
+860
 390
 Drug 1 Mean Resistance
 mean [drug1_resistance] of turtles
@@ -555,9 +576,9 @@ mean [drug1_resistance] of turtles
 11
 
 MONITOR
-835
+720
 400
-975
+860
 445
 Drug 2 Mean Resistance
 mean [drug2_resistance] of turtles
@@ -566,9 +587,9 @@ mean [drug2_resistance] of turtles
 11
 
 MONITOR
-685
+570
 345
-825
+710
 390
 Drug 1 Min Resistance
 min [drug1_resistance] of turtles
@@ -577,9 +598,9 @@ min [drug1_resistance] of turtles
 11
 
 MONITOR
-685
+570
 400
-825
+710
 445
 Drug 2 Min Resistance
 min [drug2_resistance] of turtles
@@ -588,9 +609,9 @@ min [drug2_resistance] of turtles
 11
 
 MONITOR
-985
+870
 345
-1125
+1010
 390
 Drug 1 Max Resistance
 max [drug1_resistance] of turtles
@@ -599,9 +620,9 @@ max [drug1_resistance] of turtles
 11
 
 MONITOR
-985
+870
 400
-1125
+1010
 445
 Drug 2 Max Resistance
 max [drug2_resistance] of turtles
@@ -610,9 +631,9 @@ max [drug2_resistance] of turtles
 11
 
 PLOT
-1135
+1020
 455
-1575
+1455
 775
 Min/Max Drug Resistance
 NIL
@@ -631,10 +652,10 @@ PENS
 "Drug 2 Min" 1.0 0 -11221820 true "" "plot min [drug2_resistance] of turtles"
 
 SLIDER
-390
-380
-560
-413
+370
+530
+540
+563
 drug1_max_resistance_gain
 drug1_max_resistance_gain
 0
@@ -646,10 +667,10 @@ NIL
 HORIZONTAL
 
 SLIDER
-390
-420
-560
-453
+370
+570
+540
+603
 drug2_max_resistance_gain
 drug2_max_resistance_gain
 0
@@ -661,10 +682,10 @@ NIL
 HORIZONTAL
 
 SLIDER
-210
-460
-382
-493
+190
+610
+362
+643
 range_of_mutation
 range_of_mutation
 0
@@ -676,10 +697,10 @@ NIL
 HORIZONTAL
 
 MONITOR
-360
-225
-515
-270
+190
+345
+355
+390
 Number of Drug1 Use
 number-of-drug1-use
 0
@@ -687,15 +708,70 @@ number-of-drug1-use
 11
 
 MONITOR
-520
-225
-675
-270
+365
+345
+540
+390
 Number of Drug2 Use
 number-of-drug2-use
 0
 1
 11
+
+INPUTBOX
+10
+125
+155
+185
+seed
+-1.300357467E9
+1
+0
+Number
+
+BUTTON
+10
+195
+155
+228
+NIL
+refresh-seed
+NIL
+1
+T
+OBSERVER
+NIL
+NIL
+NIL
+NIL
+1
+
+TEXTBOX
+55
+45
+110
+63
+Setup
+16
+0.0
+1
+
+BUTTON
+10
+240
+155
+273
+NIL
+setup-with-refresh-seed
+NIL
+1
+T
+OBSERVER
+NIL
+NIL
+NIL
+NIL
+1
 
 @#$#@#$#@
 ## WHAT IS IT?
@@ -1043,6 +1119,82 @@ NetLogo 6.0.4
 @#$#@#$#@
 @#$#@#$#@
 @#$#@#$#@
+<experiments>
+  <experiment name="experiment" repetitions="1" runMetricsEveryStep="true">
+    <setup>setup</setup>
+    <go>go</go>
+    <metric>count turtles</metric>
+    <enumeratedValueSet variable="spread_rate">
+      <value value="180"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="transformation_enabled">
+      <value value="false"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="mutation_chance">
+      <value value="5"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="drug2_enabled">
+      <value value="false"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="drug2_base_resistance_max">
+      <value value="11"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="drug1_max_resistance_gain">
+      <value value="5"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="drug2_end_tick">
+      <value value="0"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="drug1_interval">
+      <value value="1545"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="seed">
+      <value value="-1649234915"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="drug1_base_resistance_min">
+      <value value="5"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="spread_chance">
+      <value value="50"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="range_of_mutation">
+      <value value="2"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="stop_after_drug_course">
+      <value value="true"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="drug2_start_tick">
+      <value value="0"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="drug1_base_resistance_max">
+      <value value="6"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="transformation_chance">
+      <value value="11"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="drug2_interval">
+      <value value="100"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="initial_disease_count">
+      <value value="10"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="drug1_enabled">
+      <value value="true"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="drug1_start_tick">
+      <value value="2000"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="drug2_base_resistance_min">
+      <value value="4"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="drug2_max_resistance_gain">
+      <value value="3"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="drug1_end_tick">
+      <value value="0"/>
+    </enumeratedValueSet>
+  </experiment>
+</experiments>
 @#$#@#$#@
 @#$#@#$#@
 default
