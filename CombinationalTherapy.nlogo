@@ -1,6 +1,6 @@
 turtles-own [drug1_resistance drug2_resistance]
 
-globals[drug1_trigger drug2_trigger]
+globals[drug1_trigger drug2_trigger d1_mean d2_mean d1_max d2_max d1_min d2_min]
 
 ;;_Setup________________________________________
 
@@ -36,6 +36,18 @@ to setup-disease
   ]
 end
 
+to assign_reports
+  if(count turtles != 0)[
+  set d1_mean mean [drug1_resistance] of turtles
+  set d2_mean mean [drug2_resistance] of turtles
+  set d1_max max [drug1_resistance] of turtles
+  set d1_min min [drug1_resistance] of turtles
+  set d1_max max [drug1_resistance] of turtles
+  set d1_min min [drug1_resistance] of turtles
+  ]
+
+end
+
 ;;_Go________________________________________
 
 ;;Performs per-tick operations in the model.
@@ -50,6 +62,7 @@ to go
     if(ticks mod spread_rate = 0) [spread-disease]
   ]
 
+  assign_reports
   tick
 end
 
@@ -259,7 +272,7 @@ spread_rate
 spread_rate
 10
 1000
-180.0
+90.0
 10
 1
 ticks
@@ -274,7 +287,7 @@ spread_chance
 spread_chance
 1
 100
-50.0
+10.0
 1
 1
 %
@@ -289,7 +302,7 @@ drug1_interval
 drug1_interval
 100
 10000
-1545.0
+144.0
 1
 1
 ticks
@@ -323,7 +336,7 @@ drug2_interval
 drug2_interval
 100
 10000
-100.0
+288.0
 1
 1
 ticks
@@ -336,7 +349,7 @@ SWITCH
 103
 drug1_enabled
 drug1_enabled
-1
+0
 1
 -1000
 
@@ -347,7 +360,7 @@ SWITCH
 148
 drug2_enabled
 drug2_enabled
-1
+0
 1
 -1000
 
@@ -378,7 +391,7 @@ mutation_chance
 mutation_chance
 0
 100
-5.0
+1.0
 1
 1
 %
@@ -390,7 +403,7 @@ INPUTBOX
 370
 265
 drug1_start_tick
-2000.0
+2016.0
 1
 0
 Number
@@ -401,7 +414,7 @@ INPUTBOX
 555
 265
 drug2_start_tick
-0.0
+2016.0
 1
 0
 Number
@@ -425,7 +438,7 @@ drug1_base_resistance_min
 drug1_base_resistance_min
 1
 drug1_base_resistance_max
-5.0
+1.0
 1
 1
 NIL
@@ -440,7 +453,7 @@ drug2_base_resistance_min
 drug2_base_resistance_min
 1
 drug2_base_resistance_max
-4.0
+1.0
 1
 1
 NIL
@@ -452,7 +465,7 @@ INPUTBOX
 370
 335
 drug1_end_tick
-0.0
+18196.0
 1
 0
 Number
@@ -463,7 +476,7 @@ INPUTBOX
 555
 335
 drug2_end_tick
-0.0
+18196.0
 1
 0
 Number
@@ -519,7 +532,7 @@ transformation_chance
 transformation_chance
 0
 100
-11.0
+5.0
 1
 1
 %
@@ -534,7 +547,7 @@ drug1_base_resistance_max
 drug1_base_resistance_max
 drug1_base_resistance_min
 100
-6.0
+1.0
 1
 1
 NIL
@@ -549,7 +562,7 @@ drug2_base_resistance_max
 drug2_base_resistance_max
 drug1_base_resistance_min
 100
-11.0
+1.0
 1
 1
 NIL
@@ -662,7 +675,7 @@ drug1_max_resistance_gain
 drug1_max_resistance_gain
 0
 100
-5.0
+1.0
 1
 1
 NIL
@@ -677,7 +690,7 @@ drug2_max_resistance_gain
 drug2_max_resistance_gain
 0
 100
-3.0
+1.0
 1
 1
 NIL
@@ -692,7 +705,7 @@ range_of_mutation
 range_of_mutation
 0
 100
-2.0
+1.0
 1
 1
 NIL
@@ -1125,57 +1138,35 @@ NetLogo 6.0.4
   <experiment name="experiment" repetitions="1" runMetricsEveryStep="true">
     <setup>setup</setup>
     <go>go</go>
+    <metric>mean [(drug1_resistance)] of turtles</metric>
+    <metric>mean [(drug2_resistance)] of turtles</metric>
     <metric>count turtles</metric>
     <enumeratedValueSet variable="spread_rate">
-      <value value="180"/>
+      <value value="90"/>
     </enumeratedValueSet>
     <enumeratedValueSet variable="transformation_enabled">
       <value value="false"/>
+      <value value="true"/>
     </enumeratedValueSet>
     <enumeratedValueSet variable="mutation_chance">
-      <value value="5"/>
-    </enumeratedValueSet>
-    <enumeratedValueSet variable="drug2_enabled">
-      <value value="false"/>
-    </enumeratedValueSet>
-    <enumeratedValueSet variable="drug2_base_resistance_max">
-      <value value="11"/>
-    </enumeratedValueSet>
-    <enumeratedValueSet variable="drug1_max_resistance_gain">
-      <value value="5"/>
-    </enumeratedValueSet>
-    <enumeratedValueSet variable="drug2_end_tick">
       <value value="0"/>
-    </enumeratedValueSet>
-    <enumeratedValueSet variable="drug1_interval">
-      <value value="1545"/>
+      <value value="1"/>
     </enumeratedValueSet>
     <enumeratedValueSet variable="seed">
-      <value value="-1649234915"/>
-    </enumeratedValueSet>
-    <enumeratedValueSet variable="drug1_base_resistance_min">
-      <value value="5"/>
+      <value value="-1300357467"/>
     </enumeratedValueSet>
     <enumeratedValueSet variable="spread_chance">
-      <value value="50"/>
+      <value value="10"/>
+      <value value="20"/>
     </enumeratedValueSet>
     <enumeratedValueSet variable="range_of_mutation">
-      <value value="2"/>
+      <value value="1"/>
     </enumeratedValueSet>
     <enumeratedValueSet variable="stop_after_drug_course">
       <value value="true"/>
     </enumeratedValueSet>
-    <enumeratedValueSet variable="drug2_start_tick">
-      <value value="0"/>
-    </enumeratedValueSet>
-    <enumeratedValueSet variable="drug1_base_resistance_max">
-      <value value="6"/>
-    </enumeratedValueSet>
     <enumeratedValueSet variable="transformation_chance">
-      <value value="11"/>
-    </enumeratedValueSet>
-    <enumeratedValueSet variable="drug2_interval">
-      <value value="100"/>
+      <value value="5"/>
     </enumeratedValueSet>
     <enumeratedValueSet variable="initial_disease_count">
       <value value="10"/>
@@ -1183,17 +1174,49 @@ NetLogo 6.0.4
     <enumeratedValueSet variable="drug1_enabled">
       <value value="true"/>
     </enumeratedValueSet>
-    <enumeratedValueSet variable="drug1_start_tick">
-      <value value="2000"/>
+    <enumeratedValueSet variable="drug1_interval">
+      <value value="144"/>
+      <value value="288"/>
+      <value value="576"/>
     </enumeratedValueSet>
-    <enumeratedValueSet variable="drug2_base_resistance_min">
-      <value value="4"/>
+    <enumeratedValueSet variable="drug1_base_resistance_max">
+      <value value="1"/>
     </enumeratedValueSet>
-    <enumeratedValueSet variable="drug2_max_resistance_gain">
-      <value value="3"/>
+    <enumeratedValueSet variable="drug1_base_resistance_min">
+      <value value="1"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="drug1_max_resistance_gain">
+      <value value="1"/>
     </enumeratedValueSet>
     <enumeratedValueSet variable="drug1_end_tick">
-      <value value="0"/>
+      <value value="18196"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="drug1_start_tick">
+      <value value="2016"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="drug2_enabled">
+      <value value="false"/>
+      <value value="true"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="drug2_interval">
+      <value value="144"/>
+      <value value="288"/>
+      <value value="576"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="drug2_base_resistance_max">
+      <value value="1"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="drug2_base_resistance_min">
+      <value value="1"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="drug2_max_resistance_gain">
+      <value value="1"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="drug2_end_tick">
+      <value value="18196"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="drug2_start_tick">
+      <value value="2016"/>
     </enumeratedValueSet>
   </experiment>
 </experiments>
