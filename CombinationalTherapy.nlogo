@@ -184,7 +184,7 @@ end
 ;;_Helpers________________________________________
 
 to-report random-range [min-range max-range]
-  ifelse (min-range == max-range)
+  ifelse (min-range = max-range)
   [report min-range]
   [report random (max-range - min-range) + min-range]
 end
